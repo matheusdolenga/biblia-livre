@@ -46,5 +46,14 @@ The user is moving towards **v0.6 Beta**.
 3.  **Context Awareness:** Always check `MainViewModel.cs` before creating new Logic to avoid duplication.
 4.  **Distribution:** When asked to build, always use `dotnet build -c Release`.
 
+## 6. AUTO-UPDATE PROTOCOL (CRITICAL)
+**Instructions for the AI:**
+- **WHEN TO UPDATE:** At the end of *every* significant task or session (before calling `notify_user` to finish).
+- **WHAT TO UPDATE:** 
+  - Update **Current State** (Section 3) if features changed.
+  - Update **Immediate Next Steps** (Section 4) if priorities shifted.
+  - Update **Last Updated** date below.
+- **WHY:** To preserve context in case of unexpected disconnection. **You are responsible for keeping this file alive.**
+
 ---
-*Last Updated: 19/12/2025*
+*Last Updated: 19/12/2025 (v0.5 Alpha Published)*
