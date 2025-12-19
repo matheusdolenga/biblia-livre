@@ -23,13 +23,18 @@ namespace BibleApp.ViewModels
         private ObservableCollection<BookModel> _books;
 
         [ObservableProperty]
-        private BookModel _selectedBook;
+        private BookModel? _selectedBook;
         
         [ObservableProperty]
         private ObservableCollection<int> _chapters; // Numbers 1..N
 
         [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(CanGoNext))]
+        [NotifyPropertyChangedFor(nameof(CanGoPrevious))]
         private int? _selectedChapter;
+
+        public bool CanGoNext => SelectedChapter.HasValue && Chapters.Count > 0 && SelectedChapter.Value < Chapters.Count;
+        public bool CanGoPrevious => SelectedChapter.HasValue && SelectedChapter.Value > 1;
 
         [ObservableProperty]
         private ObservableCollection<VerseViewModel> _verses;
@@ -47,6 +52,9 @@ namespace BibleApp.ViewModels
             Chapters = new ObservableCollection<int>();
             Verses = new ObservableCollection<VerseViewModel>();
             
+            _searchQuery = string.Empty;
+            _verseOfDayTitle = string.Empty;
+
             // Initial Load
             LoadBooksCommand.ExecuteAsync(null);
         }
@@ -74,7 +82,7 @@ namespace BibleApp.ViewModels
             if (CurrentFontSize > 12) CurrentFontSize -= 2;
         }
 
-        partial void OnSelectedBookChanged(BookModel value)
+        partial void OnSelectedBookChanged(BookModel? value)
         {
             if (value == null) return;
             LoadChaptersForBook(value.Id);
@@ -111,6 +119,18 @@ namespace BibleApp.ViewModels
             {
                 LoadChapterContentCommand.ExecuteAsync(null);
             }
+        }
+
+        [RelayCommand]
+        private void NextChapter()
+        {
+            if (CanGoNext) SelectedChapter++;
+        }
+
+        [RelayCommand]
+        private void PreviousChapter()
+        {
+            if (CanGoPrevious) SelectedChapter--;
         }
 
         [RelayCommand]
@@ -153,9 +173,9 @@ namespace BibleApp.ViewModels
         private int _searchTestamentFilter = 0; // 0: Todos, 1: Velho, 2: Novo
 
         [ObservableProperty]
-        private BookModel _searchBookFilter;
+        private BookModel? _searchBookFilter;
 
-        private CancellationTokenSource _searchCts;
+        private CancellationTokenSource? _searchCts;
 
         async partial void OnSearchQueryChanged(string value)
         {
@@ -167,12 +187,12 @@ namespace BibleApp.ViewModels
              await RunSearch();
         }
 
-        async partial void OnSearchBookFilterChanged(BookModel value)
+        async partial void OnSearchBookFilterChanged(BookModel? value)
         {
              await RunSearch();
         }
 
-        public event Action<int> ScrollToVerseRequested;
+        public event Action<int>? ScrollToVerseRequested;
         private int? _targetScrollVerse;
 
         [RelayCommand]
@@ -182,9 +202,9 @@ namespace BibleApp.ViewModels
         }
 
         [RelayCommand]
-        private async Task NavigateToSearchResult(VerseSearchItem item)
+        private Task NavigateToSearchResult(VerseSearchItem item)
         {
-            if (item == null) return;
+            if (item == null) return Task.CompletedTask;
 
             IsSearchMode = false;
             
@@ -217,6 +237,7 @@ namespace BibleApp.ViewModels
                     }
                 }
             }
+            return Task.CompletedTask;
         }
         
         [RelayCommand]
@@ -269,7 +290,7 @@ namespace BibleApp.ViewModels
         [ObservableProperty]
         private bool _isSpeaking;
 
-        private System.Speech.Synthesis.SpeechSynthesizer _synthesizer;
+        private System.Speech.Synthesis.SpeechSynthesizer? _synthesizer;
 
         [RelayCommand]
         private void ToggleSpeech()
@@ -324,7 +345,7 @@ namespace BibleApp.ViewModels
 
         // --- VERSE OF THE DAY ---
         [ObservableProperty]
-        private VerseViewModel _verseOfDay;
+        private VerseViewModel? _verseOfDay;
 
         [ObservableProperty]
         private string _verseOfDayTitle;
@@ -361,8 +382,8 @@ namespace BibleApp.ViewModels
 
     public class VerseOfDayResult
     {
-        public VerseViewModel Verse { get; set; }
-        public string Title { get; set; }
+        public VerseViewModel? Verse { get; set; }
+        public string? Title { get; set; }
     }
 
     public partial class VerseViewModel : CommunityToolkit.Mvvm.ComponentModel.ObservableObject
@@ -374,15 +395,15 @@ namespace BibleApp.ViewModels
         private bool _isHighlighted;
 
         [CommunityToolkit.Mvvm.ComponentModel.ObservableProperty]
-        private SolidColorBrush _highlightBrush;
+        private SolidColorBrush _highlightBrush = Brushes.Transparent;
 
         [CommunityToolkit.Mvvm.ComponentModel.ObservableProperty]
         private bool _hasNote;
 
         [CommunityToolkit.Mvvm.ComponentModel.ObservableProperty]
-        private string _noteContent;
+        private string? _noteContent;
 
-        public VerseViewModel(Verse verse, UserService userService, bool isHighlighted = false, string noteContent = null)
+        public VerseViewModel(Verse verse, UserService userService, bool isHighlighted = false, string? noteContent = null)
         {
             Verse = verse;
             _userService = userService;

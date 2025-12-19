@@ -99,6 +99,11 @@
         <!-- Reader -->
         <ScrollViewer x:Name="ReaderScrollViewer" Grid.Row="1" PanningMode="VerticalOnly" VerticalScrollBarVisibility="Auto">
             <Grid MaxWidth="900" HorizontalAlignment="Center" Margin="24,32">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                
                 <ItemsControl x:Name="VersesList" ItemsSource="{Binding Verses}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
@@ -121,6 +126,33 @@
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
+                
+                <!-- Navigation Buttons -->
+                <Grid Grid.Row="1" Margin="0,32,0,0">
+                    <!-- Previous -->
+                    <Button HorizontalAlignment="Left" 
+                            Command="{Binding PreviousChapterCommand}" 
+                            Visibility="{Binding CanGoPrevious, Converter={StaticResource BooleanToVisibilityConverter}}"
+                            Style="{StaticResource MaterialDesignOutlinedButton}"
+                            ToolTip="Capítulo Anterior">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="ArrowLeft" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="Capítulo Anterior" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+
+                    <!-- Next -->
+                    <Button HorizontalAlignment="Right" 
+                            Command="{Binding NextChapterCommand}" 
+                            Visibility="{Binding CanGoNext, Converter={StaticResource BooleanToVisibilityConverter}}"
+                            Style="{StaticResource MaterialDesignOutlinedButton}"
+                            ToolTip="Próximo Capítulo">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Próximo Capítulo" VerticalAlignment="Center"/>
+                            <materialDesign:PackIcon Kind="ArrowRight" Margin="8,0,0,0" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                </Grid>
             </Grid>
         </ScrollViewer>
 

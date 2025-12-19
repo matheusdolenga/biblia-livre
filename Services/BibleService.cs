@@ -25,7 +25,7 @@ namespace BibleApp.Services
             {
                 return await _db.Table<BookModel>().ToListAsync();
             }
-            catch (Exception ex)
+            catch
             {
                 return new List<BookModel>(); 
             }
@@ -57,7 +57,7 @@ namespace BibleApp.Services
         }
 
         // --- SEARCH SYSTEM ---
-        private List<VerseSearchItem> _searchCache;
+        private List<VerseSearchItem> _searchCache = new();
         private bool _isSearchInitialized = false;
 
         public async Task InitializeSearchAsync()
@@ -104,7 +104,7 @@ namespace BibleApp.Services
             var normalizedQuery = RemoveDiacritics(query).ToLowerInvariant();
 
             // Simple LINQ filtering
-            var results = _searchCache.AsEnumerable();
+            var results = _searchCache!.AsEnumerable();
 
             if (testamentId.HasValue) results = results.Where(v => v.TestamentId == testamentId.Value);
             if (bookId.HasValue) results = results.Where(v => v.BookId == bookId.Value);

@@ -18,6 +18,6 @@ namespace BibleApp.Models
         public int VerseNumber { get; set; }
 
         [Column("text")]
-        public string Text { get; set; }
+        public string Text { get; set; } = string.Empty;
     }
 }

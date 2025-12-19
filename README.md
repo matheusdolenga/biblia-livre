@@ -2,7 +2,7 @@
 
 > *"A Palavra de Deus, livre para todos, em qualquer lugar."*
 
-![Status](https://img.shields.io/badge/Status-Alpha%20v0.5-orange) ![License](https://img.shields.io/badge/License-Free-green) ![Platform](https://img.shields.io/badge/Platform-Windows-blue)
+![Status](https://img.shields.io/badge/Status-Beta%20v0.6-orange) ![License](https://img.shields.io/badge/License-Free-green) ![Platform](https://img.shields.io/badge/Platform-Windows-blue)
 
 ## 🌍 Missão do Projeto
 O objetivo do **Bíblia Livre** é simples e urgente: fornecer uma ferramenta de leitura e estudo da Bíblia que seja **totalmente acessível, offline e segura**.
@@ -16,11 +16,11 @@ Focamos especialmente em cristãos em regiões onde o acesso à Bíblia é restr
 
 ---
 
-## 🚀 Funcionalidades Atuais (v0.5 Alpha)
-
-Esta versão inicial para Windows (Desktop) já inclui:
-
-- **📖 Leitura Fluida:** Texto bíblico completo (PT-BR) com navegação rápida entre Livros, Capítulos e Versículos.
+## 🚀 Funcionalidades Atuais (v0.6 Beta)
+ 
+ Esta versão inicial para Windows (Desktop) já inclui:
+ 
+ - **📖 Leitura Fluida:** Texto bíblico completo (PT-BR) com navegação rápida e **botões de próximo/anterior capítulo**.
 - **🌙 Modo Escuro:** Interface moderna com suporte total a temas Claro e Escuro para leitura confortável à noite.
 - **🔍 Pesquisa Inteligente:** Busque por palavras-chave em toda a Bíblia ou filtre por Testamento/Livro.
 - **🖊️ Ferramentas de Estudo:** 

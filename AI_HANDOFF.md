@@ -20,10 +20,10 @@
   - `BibleService.cs`: SQLite queries for fetching scripture.
   - `VerseOfDayService.cs`: Curated daily verses logic.
 
-## 3. Current State (v0.5 Alpha - Released)
+## 3. Current State (v0.6 Beta - Released)
 - **Status:** **STABLE / RELEASED**.
 - **Features Completed:**
-  - [x] Full Bible Text Reader (PT-BR).
+  - [x] Full Bible Text Reader (PT-BR) with **Next/Previous Chapter Navigation**.
   - [x] Search (Old/New Test, Book Filters).
   - [x] Dark/Light Mode.
   - [x] Highlighting (Yellow) & Notes system.
@@ -35,7 +35,7 @@
   - GitHub Repo: `https://github.com/matheusdolenga/biblia-livre`.
 
 ## 4. Immediate Next Steps (Roadmap)
-The user is moving towards **v0.6 Beta**.
+The user is moving towards **v0.7 Beta**.
 1.  **Reading Streak (Ofensiva):** Logic exists in `User` model (`CurrentStreak`), needs UI implementation (Icon + Badge).
 2.  **Image Generator:** Feature to create shareable social media images from verses.
 3.  **Refinement:** Persistent window state (size/position).
@@ -56,4 +56,4 @@ The user is moving towards **v0.6 Beta**.
 - **WHY:** To preserve context in case of unexpected disconnection. **You are responsible for keeping this file alive.**
 
 ---
-*Last Updated: 19/12/2025 (v0.5 Alpha Published)*
+*Last Updated: 19/12/2025 (v0.6 Beta Published)*

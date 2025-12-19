@@ -15,7 +15,7 @@ namespace BibleApp.Services
         {
             var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "BibleApp", "user.db");
             var dir = Path.GetDirectoryName(path);
-            if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
+            if (dir != null && !Directory.Exists(dir)) Directory.CreateDirectory(dir);
             
             _db = new SQLiteAsyncConnection(path);
             _ = InitializeAsync(); // Safe fire and forget with suppression? No, still risky if unhandled.
@@ -50,7 +50,9 @@ namespace BibleApp.Services
             // Simple file storage for streak
             try
             {
-               var path = Path.Combine(Path.GetDirectoryName(_db.DatabasePath), "streak.txt");
+               var dir = Path.GetDirectoryName(_db.DatabasePath);
+               if (dir == null) return 0;
+               var path = Path.Combine(dir, "streak.txt");
                if (File.Exists(path))
                {
                    var lines = await File.ReadAllLinesAsync(path);
@@ -66,7 +68,9 @@ namespace BibleApp.Services
 
         public async Task UpdateStreakAsync()
         {
-             var path = Path.Combine(Path.GetDirectoryName(_db.DatabasePath), "streak.txt");
+             var dir = Path.GetDirectoryName(_db.DatabasePath);
+             if (dir == null) return;
+             var path = Path.Combine(dir, "streak.txt");
              DateTime lastDate = DateTime.MinValue;
              int currentStreak = 0;
 
@@ -123,7 +127,7 @@ namespace BibleApp.Services
             await _db.Table<Note>().DeleteAsync(n => n.BookId == bookId && n.Chapter == chapter && n.VerseNumber == verse);
         }
 
-        public async Task<Note> GetNoteAsync(int bookId, int chapter, int verse)
+        public async Task<Note?> GetNoteAsync(int bookId, int chapter, int verse)
         {
             return await _db.Table<Note>()
                             .Where(n => n.BookId == bookId && n.Chapter == chapter && n.VerseNumber == verse)

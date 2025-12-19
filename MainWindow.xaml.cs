@@ -128,7 +128,7 @@ public partial class MainWindow : Window
         }
     }
 
-    private T FindVisualChild<T>(DependencyObject parent, string name = null) where T : DependencyObject
+    private T? FindVisualChild<T>(DependencyObject parent, string? name = null) where T : DependencyObject
     {
         for (int i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
         {

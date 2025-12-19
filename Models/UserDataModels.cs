@@ -11,7 +11,7 @@ namespace BibleApp.Models
         public int BookId { get; set; }
         public int Chapter { get; set; }
         public int VerseNumber { get; set; }
-        public string Color { get; set; } // Hex code
+        public string Color { get; set; } = string.Empty; // Hex code
         public DateTime Date { get; set; }
     }
 
@@ -23,7 +23,7 @@ namespace BibleApp.Models
         public int BookId { get; set; }
         public int Chapter { get; set; }
         public int VerseNumber { get; set; }
-        public string Content { get; set; }
+        public string Content { get; set; } = string.Empty;
         public DateTime Date { get; set; }
     }
 }

@@ -62,7 +62,7 @@ namespace BibleApp.Services
             _bibleService = bibleService;
         }
 
-        public async Task<VerseViewModel> GetVerseOfDayAsync(UserService userService)
+        public async Task<VerseViewModel?> GetVerseOfDayAsync(UserService userService)
         {
             // Pick based on day of year to ensure consistency for the whole day
             int dayOfYear = DateTime.Now.DayOfYear;
