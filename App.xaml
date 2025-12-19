@@ -1,0 +1,66 @@
+﻿<Application x:Class="BibleApp.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:BibleApp"
+             xmlns:vm="clr-namespace:BibleApp.ViewModels"
+             xmlns:helpers="clr-namespace:BibleApp.Helpers"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.DeepPurple.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <helpers:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
+            
+            <!-- Templates -->
+            <DataTemplate DataType="{x:Type vm:VerseViewModel}">
+                 <StackPanel Margin="16" Width="300">
+                     <TextBlock Text="Editar Nota" Style="{StaticResource MaterialDesignHeadline6TextBlock}" Margin="0,0,0,10"/>
+                     <TextBox Text="{Binding NoteContent, UpdateSourceTrigger=PropertyChanged}" 
+                              AcceptsReturn="True" 
+                              MinLines="3" 
+                              materialDesign:HintAssist.Hint="Escreva sua nota aqui..." 
+                              Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
+                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
+                         <Button Content="Salvar" Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}" 
+                                 CommandParameter="{Binding NoteContent}"
+                                 Style="{StaticResource MaterialDesignFlatButton}"/>
+                     </StackPanel>
+                 </StackPanel>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type vm:VerseOfDayResult}">
+                <materialDesign:Card UniformCornerRadius="16" Padding="24" MaxWidth="400">
+                    <StackPanel>
+                        <materialDesign:PackIcon Kind="FormatQuoteOpen" Width="40" Height="40" Foreground="{DynamicResource PrimaryHueMidBrush}" HorizontalAlignment="Left" Opacity="0.5"/>
+                        
+                        <TextBlock Text="{Binding Verse.Verse.Text}" 
+                                   TextWrapping="Wrap" 
+                                   FontSize="22" 
+                                   FontStyle="Italic" 
+                                   Margin="10,16" 
+                                   TextAlignment="Center" 
+                                   LineHeight="34"/>
+                        
+                        <TextBlock Text="{Binding Title}" 
+                                   HorizontalAlignment="Right" 
+                                   FontWeight="Bold" 
+                                   FontSize="16" 
+                                   Foreground="{DynamicResource PrimaryHueMidBrush}"
+                                   Margin="0,0,0,16"/>
+
+                        <Button Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}" 
+                                Style="{StaticResource MaterialDesignFlatButton}" 
+                                Content="AMÉM 🙏"
+                                HorizontalAlignment="Center"
+                                FontSize="16"
+                                FontWeight="Bold"/>
+                    </StackPanel>
+                </materialDesign:Card>
+            </DataTemplate>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

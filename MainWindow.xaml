@@ -1,0 +1,179 @@
+﻿<Window x:Class="BibleApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:local="clr-namespace:BibleApp"
+        xmlns:vm="clr-namespace:BibleApp.ViewModels"
+        xmlns:helpers="clr-namespace:BibleApp.Helpers"
+        mc:Ignorable="d"
+        Title="Bíblia Sagrada" Height="700" Width="1000"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="14"
+        TextOptions.TextFormattingMode="Ideal"
+        TextOptions.TextRenderingMode="Auto"
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="{DynamicResource MaterialDesignFont}">
+    
+    <materialDesign:DialogHost Identifier="RootDialog" DialogTheme="Inherit" DialogClosing="DialogHost_DialogClosing">
+
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <materialDesign:ColorZone Mode="PrimaryMid" Padding="20" materialDesign:ShadowAssist.ShadowDepth="Depth3">
+            <DockPanel>
+                <TextBlock Text="Bíblia Sagrada" VerticalAlignment="Center" Margin="0,0,24,0" FontSize="20" FontWeight="Medium" Style="{StaticResource MaterialDesignHeadline6TextBlock}" Foreground="White"/>
+                
+                <StackPanel Orientation="Horizontal" DockPanel.Dock="Left" VerticalAlignment="Center">
+                    <ComboBox ItemsSource="{Binding Books}" SelectedItem="{Binding SelectedBook}" 
+                              DisplayMemberPath="Name" 
+                              materialDesign:HintAssist.Hint="Livro"
+                              Width="220" Margin="0,0,16,0"
+                              Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                              Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"
+                              BorderBrush="{DynamicResource PrimaryHueMidForegroundBrush}"
+                              materialDesign:TextFieldAssist.UnderlineBrush="{DynamicResource PrimaryHueMidForegroundBrush}"
+                              materialDesign:HintAssist.Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"
+                              FontSize="16">
+                        <ComboBox.ItemContainerStyle>
+                            <Style TargetType="ComboBoxItem" BasedOn="{StaticResource MaterialDesignComboBoxItemStyle}">
+                                <Setter Property="Foreground" Value="{DynamicResource MaterialDesignBody}"/>
+                            </Style>
+                        </ComboBox.ItemContainerStyle>
+                    </ComboBox>
+
+                    <ComboBox ItemsSource="{Binding Chapters}" SelectedItem="{Binding SelectedChapter}"
+                              materialDesign:HintAssist.Hint="Capítulo"
+                              Width="100" Margin="0,0,16,0"
+                              Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                              Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"
+                              BorderBrush="{DynamicResource PrimaryHueMidForegroundBrush}"
+                              materialDesign:TextFieldAssist.UnderlineBrush="{DynamicResource PrimaryHueMidForegroundBrush}"
+                              materialDesign:HintAssist.Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"
+                              FontSize="16">
+                        <ComboBox.ItemContainerStyle>
+                            <Style TargetType="ComboBoxItem" BasedOn="{StaticResource MaterialDesignComboBoxItemStyle}">
+                                <Setter Property="Foreground" Value="{DynamicResource MaterialDesignBody}"/>
+                            </Style>
+                        </ComboBox.ItemContainerStyle>
+                    </ComboBox>
+                </StackPanel>
+
+                 <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" HorizontalAlignment="Right" VerticalAlignment="Center">
+                     <Button Command="{Binding OpenVerseOfDayCommand}" Style="{StaticResource MaterialDesignIconForegroundButton}" ToolTip="Versículo do Dia" Margin="0,0,16,0" Width="40" Height="40">
+                         <materialDesign:PackIcon Kind="Gift" Width="24" Height="24" Foreground="White" />
+                     </Button>
+
+                     <Button Command="{Binding ToggleThemeCommand}" Style="{StaticResource MaterialDesignIconForegroundButton}" ToolTip="Alternar Tema" Margin="0,0,16,0" Width="40" Height="40">
+                         <materialDesign:PackIcon Kind="Brightness6" Width="24" Height="24" Foreground="White" />
+                     </Button>
+
+                     <Button Command="{Binding ToggleSearchCommand}" Style="{StaticResource MaterialDesignIconForegroundButton}" ToolTip="Pesquisar" Margin="0,0,16,0" Width="40" Height="40">
+                         <materialDesign:PackIcon Kind="Magnify" Width="28" Height="28" Foreground="White" />
+                     </Button>
+
+                     <RepeatButton Command="{Binding DecreaseFontCommand}" Style="{StaticResource MaterialDesignIconForegroundButton}" ToolTip="Diminuir Fonte" Margin="0,0,8,0">
+                         <materialDesign:PackIcon Kind="Minus" Width="24" Height="24" />
+                     </RepeatButton>
+                     
+                     <TextBlock Text="{Binding CurrentFontSize}" VerticalAlignment="Center" FontWeight="Bold" Width="30" TextAlignment="Center" Foreground="White" FontSize="16" Margin="0,0,8,0"/>
+                     
+                     <RepeatButton Command="{Binding IncreaseFontCommand}" Style="{StaticResource MaterialDesignIconForegroundButton}" ToolTip="Aumentar Fonte" Margin="0,0,24,0">
+                         <materialDesign:PackIcon Kind="Plus" Width="24" Height="24" />
+                     </RepeatButton>
+                
+                     <Button Command="{Binding ToggleSpeechCommand}" Style="{StaticResource MaterialDesignIconForegroundButton}" ToolTip="Ouvir Capítulo" Height="40" Width="40">
+                         <materialDesign:PackIcon Kind="VolumeHigh" Width="24" Height="24" />
+                     </Button>
+                 </StackPanel>
+            </DockPanel>
+        </materialDesign:ColorZone>
+
+        <!-- Reader -->
+        <ScrollViewer x:Name="ReaderScrollViewer" Grid.Row="1" PanningMode="VerticalOnly" VerticalScrollBarVisibility="Auto">
+            <Grid MaxWidth="900" HorizontalAlignment="Center" Margin="24,32">
+                <ItemsControl x:Name="VersesList" ItemsSource="{Binding Verses}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border x:Name="VerseBorder" Background="{Binding HighlightBrush}" CornerRadius="8" Padding="12,6" Margin="0,0,0,4">
+                                <TextBlock TextWrapping="Wrap" FontSize="{Binding DataContext.CurrentFontSize, RelativeSource={RelativeSource AncestorType=Window}}" LineHeight="Auto">
+                                    <TextBlock.ContextMenu>
+                                        <ContextMenu>
+                                            <MenuItem Header="Destacar/Remover Destaque" Command="{Binding ToggleHighlightCommand}" />
+                                            <MenuItem Header="Nota" Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}" CommandParameter="{Binding}" />
+                                        </ContextMenu>
+                                    </TextBlock.ContextMenu>
+                                    <Run Text="{Binding Verse.VerseNumber}" FontWeight="SemiBold" BaselineAlignment="Center" Foreground="{DynamicResource PrimaryHueMidBrush}"/>
+                                    <Run Text=" "/>
+                                    <Run Text="{Binding Verse.Text}"/>
+                                    <InlineUIContainer>
+                                        <materialDesign:PackIcon Kind="Note" Visibility="{Binding HasNote, Converter={StaticResource BooleanToVisibilityConverter}}" Width="16" Height="16" Margin="8,0,0,-2" Foreground="{DynamicResource PrimaryHueMidBrush}" ToolTip="{Binding NoteContent}"/>
+                                    </InlineUIContainer>
+                                </TextBlock>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Grid>
+        </ScrollViewer>
+
+        <!-- Search Overlay -->
+        <Grid Grid.Row="1" Background="{DynamicResource MaterialDesignPaper}" Visibility="{Binding IsSearchMode, Converter={StaticResource BooleanToVisibilityConverter}}" Panel.ZIndex="10">
+             <Grid.RowDefinitions>
+                 <RowDefinition Height="Auto"/>
+                 <RowDefinition Height="*"/>
+             </Grid.RowDefinitions>
+             
+             <!-- Search Controls -->
+             <StackPanel Orientation="Horizontal" Margin="20,20,20,10">
+                 <TextBox Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}" 
+                          materialDesign:HintAssist.Hint="Pesquisar versículo..." 
+                          Width="400" Margin="0,0,20,0" Style="{StaticResource MaterialDesignOutlinedTextBox}" VerticalAlignment="Center" FontSize="16"/>
+                 
+                 <ComboBox SelectedIndex="{Binding SearchTestamentFilter}" materialDesign:HintAssist.Hint="Testamento" Style="{StaticResource MaterialDesignOutlinedComboBox}" Width="150" Margin="0,0,20,0" VerticalAlignment="Center">
+                     <ComboBoxItem Content="Todos"/>
+                     <ComboBoxItem Content="Antigo"/>
+                     <ComboBoxItem Content="Novo"/>
+                 </ComboBox>
+                 
+                 <ComboBox ItemsSource="{Binding Books}" SelectedItem="{Binding SearchBookFilter}" DisplayMemberPath="Name" materialDesign:HintAssist.Hint="Livro (Opcional)" Style="{StaticResource MaterialDesignOutlinedComboBox}" Width="200" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                 <Button Command="{Binding ClearBookFilterCommand}" Style="{StaticResource MaterialDesignIconForegroundButton}" ToolTip="Limpar Filtro de Livro" Visibility="{Binding SearchBookFilter, Converter={StaticResource NullToVisibilityConverter}}">
+                     <materialDesign:PackIcon Kind="Close" />
+                 </Button>
+             </StackPanel>
+             
+             <!-- Results -->
+             <ListView Grid.Row="1" ItemsSource="{Binding SearchResults}" Margin="20,0,20,20" ScrollViewer.HorizontalScrollBarVisibility="Disabled" HorizontalContentAlignment="Stretch">
+                 <ListView.ItemTemplate>
+                     <DataTemplate>
+                         <Border Background="Transparent" Cursor="Hand" Padding="8">
+                             <Border.InputBindings>
+                                 <MouseBinding MouseAction="LeftClick" Command="{Binding DataContext.NavigateToSearchResultCommand, RelativeSource={RelativeSource AncestorType=Window}}" CommandParameter="{Binding}" />
+                             </Border.InputBindings>
+                             <StackPanel>
+                                 <TextBlock helpers:SearchHighlighter.SearchText="{Binding Text}" 
+                                            helpers:SearchHighlighter.HighlightTerm="{Binding DataContext.SearchQuery, RelativeSource={RelativeSource AncestorType=Window}}"
+                                            TextWrapping="Wrap" FontSize="16"/>
+                                 <TextBlock HorizontalAlignment="Right" Foreground="Gray" FontSize="12" Margin="0,4,0,0">
+                                     <Run Text="{Binding BookName}"/>
+                                     <Run Text=" "/>
+                                     <Run Text="{Binding Chapter}"/>
+                                     <Run Text=":"/>
+                                     <Run Text="{Binding VerseNumber}"/>
+                                 </TextBlock>
+                             </StackPanel>
+                         </Border>
+                     </DataTemplate>
+                 </ListView.ItemTemplate>
+             </ListView>
+        </Grid>
+    </Grid>
+    </materialDesign:DialogHost>
+</Window>
